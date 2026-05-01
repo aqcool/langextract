@@ -61,8 +61,10 @@ func (t *RegexTokenizer) Tokenize(text string) *TokenizedText {
 	lettersPattern := `[^\W\d_]+`
 	// Pattern for digits
 	digitsPattern := `\d+`
-	// Pattern for symbols (group identical symbols)
-	symbolsPattern := `([^\w\s]|_)\1*`
+	// Pattern for symbols (consecutive non-word non-space characters)
+	// Note: Go's RE2 engine doesn't support backreferences (\1),
+	// so we use a simpler pattern that groups consecutive symbols.
+	symbolsPattern := `[^\w\s]+`
 
 	// Combined pattern
 	tokenPattern := regexp.MustCompile(lettersPattern + `|` + digitsPattern + `|` + symbolsPattern)
@@ -180,7 +182,7 @@ func FindSentenceRange(text string, tokens []*Token, startTokenIndex int, knownA
 	}
 
 	// End of sentence pattern
-	endOfSentencePattern := regexp.MustCompile(`[.?!。！？]["'"\»)\]}]*$`)
+	endOfSentencePattern := regexp.MustCompile(`[.?!。！？]["'"»)\]}]*$`)
 	closingPunctuation := []string{`"`, `'`, `"`, `'`, "»", ")", "]", "}"}
 
 	i := startTokenIndex

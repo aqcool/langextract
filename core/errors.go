@@ -31,6 +31,11 @@ func (e *InferenceError) Error() string {
 	return e.Message
 }
 
+// Unwrap returns the underlying LangExtractError.
+func (e *InferenceError) Unwrap() error {
+	return e.LangExtractError
+}
+
 // NewInferenceError creates a new InferenceError.
 func NewInferenceError(message string) *InferenceError {
 	return &InferenceError{
@@ -46,6 +51,11 @@ type InferenceConfigError struct {
 
 func (e *InferenceConfigError) Error() string {
 	return e.Message
+}
+
+// Unwrap returns the underlying InferenceError.
+func (e *InferenceConfigError) Unwrap() error {
+	return e.InferenceError
 }
 
 // NewInferenceConfigError creates a new InferenceConfigError.
@@ -93,6 +103,11 @@ func (e *InferenceOutputError) Error() string {
 	return e.Message
 }
 
+// Unwrap returns the underlying LangExtractError.
+func (e *InferenceOutputError) Unwrap() error {
+	return e.LangExtractError
+}
+
 // NewInferenceOutputError creates a new InferenceOutputError.
 func NewInferenceOutputError(message string) *InferenceOutputError {
 	return &InferenceOutputError{
@@ -108,6 +123,11 @@ type InvalidDocumentError struct {
 
 func (e *InvalidDocumentError) Error() string {
 	return e.Message
+}
+
+// Unwrap returns the underlying LangExtractError.
+func (e *InvalidDocumentError) Unwrap() error {
+	return e.LangExtractError
 }
 
 // NewInvalidDocumentError creates a new InvalidDocumentError.
@@ -127,6 +147,11 @@ func (e *InternalError) Error() string {
 	return e.Message
 }
 
+// Unwrap returns the underlying LangExtractError.
+func (e *InternalError) Unwrap() error {
+	return e.LangExtractError
+}
+
 // NewInternalError creates a new InternalError.
 func NewInternalError(message string) *InternalError {
 	return &InternalError{
@@ -142,6 +167,11 @@ type ProviderError struct {
 
 func (e *ProviderError) Error() string {
 	return fmt.Sprintf("provider %s: %s", e.Provider, e.Message)
+}
+
+// Unwrap returns the underlying LangExtractError.
+func (e *ProviderError) Unwrap() error {
+	return e.LangExtractError
 }
 
 // NewProviderError creates a new ProviderError.
@@ -161,6 +191,11 @@ func (e *SchemaError) Error() string {
 	return e.Message
 }
 
+// Unwrap returns the underlying LangExtractError.
+func (e *SchemaError) Unwrap() error {
+	return e.LangExtractError
+}
+
 // NewSchemaError creates a new SchemaError.
 func NewSchemaError(message string) *SchemaError {
 	return &SchemaError{
@@ -175,6 +210,11 @@ type FormatError struct {
 
 func (e *FormatError) Error() string {
 	return e.Message
+}
+
+// Unwrap returns the underlying LangExtractError.
+func (e *FormatError) Unwrap() error {
+	return e.LangExtractError
 }
 
 // NewFormatError creates a new FormatError.
@@ -197,6 +237,11 @@ type FormatParseError struct {
 
 func (e *FormatParseError) Error() string {
 	return e.Message
+}
+
+// Unwrap returns the underlying FormatError.
+func (e *FormatParseError) Unwrap() error {
+	return e.FormatError
 }
 
 // NewFormatParseError creates a new FormatParseError.

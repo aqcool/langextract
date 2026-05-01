@@ -360,9 +360,15 @@ func (m *OpenAIModel) doAPICall(ctx context.Context, prompt string, callConfig *
 		req.Stop = callConfig.StopSequences
 	}
 
-	// Apply JSON mode
+	// Apply JSON mode (can be overridden via extra kwargs "response_format_type")
 	if m.formatType == core.FormatTypeJSON {
-		req.ResponseFormat = &responseFormat{Type: "json_object"}
+		rfType := "json_object"
+		if m.extraKwargs != nil {
+			if v, ok := m.extraKwargs["response_format_type"].(string); ok && v != "" {
+				rfType = v
+			}
+		}
+		req.ResponseFormat = &responseFormat{Type: rfType}
 	}
 
 	// Apply extra kwargs

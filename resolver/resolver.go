@@ -407,7 +407,7 @@ func (r *Resolver) findLCSMatch(
 	sourceTokens := tokenizedSource.Tokens
 
 	if len(extractionTokens) == 0 || len(sourceTokens) == 0 {
-		return LCSResult{Found: false}
+		return MatchResult{Found: false}
 	}
 
 	// Build token text arrays for comparison
@@ -484,7 +484,13 @@ func (r *Resolver) findLCSMatch(
 		}
 	}
 
-	return bestResult
+	return MatchResult{
+		Found:      bestResult.Found,
+		StartIndex: bestResult.StartIndex,
+		EndIndex:   bestResult.EndIndex,
+		StartChar:  bestResult.StartChar,
+		EndChar:    bestResult.EndChar,
+	}
 }
 
 // getTokenText extracts the text for a given token.

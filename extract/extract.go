@@ -45,6 +45,7 @@ type Config struct {
 	Model             providers.BaseLanguageModel
 	EnableFuzzyAlign  bool
 	FuzzyThreshold    float64
+	ExtraKwargs       map[string]interface{}
 }
 
 // Option is a functional option for extraction configuration.
@@ -138,6 +139,13 @@ func WithEnableFuzzyAlign(enable bool) Option {
 func WithFuzzyThreshold(threshold float64) Option {
 	return func(c *Config) {
 		c.FuzzyThreshold = threshold
+	}
+}
+
+// WithExtraKwargs sets extra keyword arguments for the model provider.
+func WithExtraKwargs(kwargs map[string]interface{}) Option {
+	return func(c *Config) {
+		c.ExtraKwargs = kwargs
 	}
 }
 
@@ -245,6 +253,11 @@ func createModel(config *Config) (providers.BaseLanguageModel, error) {
 		kwargs["temperature"] = *config.Temperature
 	}
 
+	// Merge extra kwargs
+	for k, v := range config.ExtraKwargs {
+		kwargs[k] = v
+	}
+
 	// Create model config
 	modelConfig := factory.NewModelConfig(
 		config.ModelID,
@@ -335,9 +348,9 @@ func processDocument(
 
 			// Align extractions with source text
 			charOffset := 0
-			if chunk.CharInterval != nil {
-				if chunk.CharInterval.StartPos != nil {
-					charOffset = *chunk.CharInterval.StartPos
+			if ci, err := chunk.CharInterval(); err == nil && ci != nil {
+				if ci.StartPos != nil {
+					charOffset = *ci.StartPos
 				}
 			}
 

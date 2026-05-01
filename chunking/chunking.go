@@ -159,7 +159,7 @@ func (tc *TextChunker) ChunkDocument(document *core.Document) ([]*TextChunk, err
 	}
 
 	tokenizedText := tc.tokenizer.Tokenize(document.Text)
-	if len(tokenizedText.Tokens) ==  {
+	if len(tokenizedText.Tokens) == 0 {
 		return []*TextChunk{}, nil
 	}
 
@@ -240,7 +240,8 @@ func isEndOfSentence(text string) bool {
 	if len(text) == 0 {
 		return false
 	}
-	lastChar := text[len(text)-1]
+	runes := []rune(text)
+	lastChar := runes[len(runes)-1]
 	return lastChar == '.' || lastChar == '!' || lastChar == '?' ||
 		lastChar == '。' || lastChar == '！' || lastChar == '？'
 }

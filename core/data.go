@@ -207,10 +207,16 @@ func (e *Extraction) Clone() *Extraction {
 	}
 	
 	if e.CharInterval != nil {
-		clone.CharInterval = &CharInterval{
-			StartPos: e.CharInterval.StartPos,
-			EndPos:   e.CharInterval.EndPos,
+		ci := &CharInterval{}
+		if e.CharInterval.StartPos != nil {
+			v := *e.CharInterval.StartPos
+			ci.StartPos = &v
 		}
+		if e.CharInterval.EndPos != nil {
+			v := *e.CharInterval.EndPos
+			ci.EndPos = &v
+		}
+		clone.CharInterval = ci
 	}
 	
 	if e.ExtractionIndex != nil {
